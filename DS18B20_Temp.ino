@@ -37,13 +37,12 @@ void loop(void)
   Serial.println();
   gmt = now(); // Syncs the current time with the local time
   local = myTZ.toLocal(gmt, &tcr); // Syncs the current time with the local time according to the timezone
-  printTime(local, tcr -> abbrev); // Poiner for accessing members of class instance
+  printTime(local, tcr -> abbrev); // Pointer for accessing members of class instance
   Serial.print(" ");
   digitalWrite(statusLED, HIGH); // Indicates that temperature is being read
   sensors.requestTemperatures(); // Send the command to get temperatures
   Serial.print(sensors.getTempCByIndex(0)); // Why "byIndex"? You can have more than one IC on the same bus. 0 refers to the first IC on the wire
   digitalWrite(statusLED, LOW); // Indicates that temperature is no longer being read
-  Serial.println();
   delay(15000); // Update value every 15 seconds
 }
 
@@ -51,14 +50,12 @@ void loop(void)
 void printTime(time_t t, char *tz)
 {
   sPrintI00(day(t));
-  Serial.print('/');
   sPrintI00(month(t));
-  Serial.print('/');
   sPrintI00(year(t));
-  Serial.print(' ');
+  Serial.print(" ");
   sPrintI00(hour(t));
-  sPrintDigits(minute(t));
-  sPrintDigits(second(t));
+  sPrintI00(minute(t));
+  sPrintI00(second(t));
 }
 
 // Print an integer in "00" format (with leading zero)

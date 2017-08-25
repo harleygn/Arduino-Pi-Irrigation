@@ -52,9 +52,9 @@ void printTime(time_t t, char *tz)
 {
   sPrintI00(day(t));
   Serial.print('/');
-  Serial.print(month(t));
+  sPrintI00(month(t));
   Serial.print('/');
-  Serial.print(year(t));
+  sPrintI00(year(t));
   Serial.print(' ');
   sPrintI00(hour(t));
   sPrintDigits(minute(t));

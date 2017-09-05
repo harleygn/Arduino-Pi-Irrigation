@@ -12,4 +12,4 @@ A high-level data flow diagram denoting the process involved in the system.
 * Integration of 2.4Ghz transcievers for long range communication
 * Formation of data packets
 * Call/response functionality to act as a health check between microcontrollers before requesting data
-* Processing of data packets into CVS's for further processing
+* Processing of data packets into CSV's for further processing

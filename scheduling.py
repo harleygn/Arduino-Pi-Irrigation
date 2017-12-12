@@ -4,9 +4,9 @@ import datetime
 
 
 def add_minutes(time, minutes):
-    full_date = datetime.strptime(time, "%H%M")
-    full_date = full_date + datetime.timedelta(minutes=minutes)
-    return full_date.time()
+    default_time = datetime.datetime.strptime(time, "%H%M")
+    new_time = default_time + datetime.timedelta(minutes=minutes)
+    return new_time.strftime("%H%M")
 
 
 def adjust_time(schedule_template, weather_forecast):

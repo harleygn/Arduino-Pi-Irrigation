@@ -4,7 +4,6 @@
     "low_temp": "12",
     "average_hum": "75"
   },
-
   "schedule": [
     {
       "start": "0700",

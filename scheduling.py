@@ -55,15 +55,15 @@ def adjust_time(schedule_template, weather_forecast):
     return schedule_template
 
 
-def save_schedule(updated_schedule):
+def save_schedule(updated_schedule, schedule_dir):
     date = datetime.datetime.now().strftime("%d-%m-%Y")
-    path = date + "_schedule.json"
+    path = schedule_dir + '/' + date + "_schedule.json"
     with open(path, 'w') as write_schedule:
         json.dump(updated_schedule, write_schedule)
 
 
 if __name__ == "__main__":
-    defaults = load_schedule_template("schedule_template.json")
+    defaults = load_schedule_template("schedules/schedule_template.json")
     forecast = get_forecast_data("1fbed46a06fcec66", "UK/Chilwell")
     new_schedule = adjust_time(defaults, forecast)
-    save_schedule(new_schedule)
+    save_schedule(new_schedule, 'schedules')

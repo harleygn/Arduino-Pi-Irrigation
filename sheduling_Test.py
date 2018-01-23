@@ -15,9 +15,9 @@ class GetForecastDataTest(unittest.TestCase):
 
 class AddMinutesTest(unittest.TestCase):
     def test_add_minutes(self):
-        input_time = "0830"
+        input_time = "08:30:00"
         input_minutes = 30
-        expected = "0900"
+        expected = "09:00:00"
 
         actual = scheduling.add_minutes(input_time, input_minutes)
         self.assertEqual(expected, actual)
@@ -26,12 +26,12 @@ class AddMinutesTest(unittest.TestCase):
 class AdjustTimeTest(unittest.TestCase):
     def test_adjust_time(self):
         input_schedule = {'conditions': {'high_temp': '20', 'low_temp': '12', 'average_hum': '75'},
-                          'schedule': [{'start': '0700', 'end': '0830', 'duration': '90'},
-                                       {'start': '2000', 'end': '2100', 'duration': '60'}]}
+                          'schedule': [{'start': '07:00:00', 'end': '08:30:00', 'duration': '1:30:00'},
+                                       {'start': '20:00:00', 'end': '21:00:00', 'duration': '1:00:00'}]}
         input_forecast = {'high_temp': 21, 'low_temp': 18, 'average_hum': 94}
         expected = {'conditions': {'high_temp': '20', 'low_temp': '12', 'average_hum': '75'},
-                    'schedule': [{'start': '0700', 'end': '0835', 'duration': '90'},
-                                 {'start': '2000', 'end': '2100', 'duration': '60'}]}
+                    'schedule': [{'start': '07:00:00', 'end': '08:35:00', 'duration': '1:35:00'},
+                                 {'start': '20:00:00', 'end': '21:00:00', 'duration': '1:00:00'}]}
 
         actual = scheduling.adjust_time(input_schedule, input_forecast)
         self.assertEqual(expected, actual)

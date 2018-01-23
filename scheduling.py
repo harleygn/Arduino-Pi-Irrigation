@@ -38,23 +38,32 @@ def load_schedule_template(schedule_path):
 
 def add_minutes(time, minutes):
     """Increases a given time by a given number of minutes"""
-    default_time = datetime.datetime.strptime(time, "%H%M")
+    default_time = datetime.datetime.strptime(time, "%H:%M:%S")
     new_time = default_time + datetime.timedelta(minutes=minutes)
-    return new_time.strftime("%H%M")
+    return new_time.strftime("%H:%M:%S")
 
 
 def adjust_time(schedule_template, weather_forecast):
     temp_difference = int(weather_forecast["high_temp"]) - int(schedule_template["conditions"]["high_temp"])
+    adjustment_level = temp_difference * 5
+    start_time = schedule_template["schedule"][0]["start"]
     end_time = schedule_template["schedule"][0]["end"]
-    end_time = add_minutes(end_time, temp_difference * 5)
+    end_time = add_minutes(end_time, adjustment_level)
+    duration = str(datetime.datetime.strptime(end_time, "%H:%M:%S") - datetime.datetime.strptime(start_time, "%H:%M:%S"))
     schedule_template["schedule"][0]["end"] = str(end_time).zfill(4)
+    schedule_template["schedule"][0]["duration"] = str(duration)
     return schedule_template
+
+
+def save_schedule(updated_schedule):
+    date = datetime.datetime.now().strftime("%d-%m-%Y")
+    path = date + "_schedule.json"
+    with open(path, 'w') as write_schedule:
+        json.dump(updated_schedule, write_schedule)
 
 
 if __name__ == "__main__":
     defaults = load_schedule_template("schedule_template.json")
     forecast = get_forecast_data("1fbed46a06fcec66", "UK/Chilwell")
     new_schedule = adjust_time(defaults, forecast)
-    print(defaults)
-    print(forecast)
-    print(new_schedule)
+    save_schedule(new_schedule)

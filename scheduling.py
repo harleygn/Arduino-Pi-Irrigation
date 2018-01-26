@@ -8,7 +8,7 @@ def get_forecast_data(api_key, location):
     # URL of the WeatherUnderground API for a 10 day forecast
     url = "http://api.wunderground.com/api/" + api_key + "/forecast10day/q/" + location + ".json"
     # Calls the API using 'GET' to retrieve the data as a JSON
-    api_response = json.loads(requests.get(url).content)
+    api_response = json.loads(requests.get(url).content.decode('utf-8'))
     # Parses the JSON to extract the relevant forecast type
     weather = api_response["forecast"]["simpleforecast"]["forecastday"]
     # Parses the data to extract tomorrow's forecast only

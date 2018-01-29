@@ -1,0 +1,19 @@
+{
+  "conditions": {
+    "high_temp": "20",
+    "low_temp": "12",
+    "average_hum": "75"
+  },
+  "schedule": [
+    {
+      "start": "07:00:00",
+      "end": "08:30:00",
+      "duration": "01:90:00"
+    },
+    {
+      "start": "20:00:00",
+      "end": "21:00:00",
+      "duration": "01:00:00"
+    }
+  ]
+}

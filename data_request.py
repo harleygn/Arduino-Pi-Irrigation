@@ -3,7 +3,6 @@ import csv
 import os
 import plotly.plotly as py
 import plotly.graph_objs as go
-import plotly.figure_factory as ff
 import pandas as pd
 # RADIO/SERIAL STUFF HERE
 
@@ -41,8 +40,6 @@ def log_values(log_dir, time, temp, hum):
 def plot_data(csv_path, date):
     df = pd.read_csv(csv_path)
     filename = date + '_graph'
-    data_table = ff.create_table(df.head())
-    py.plot(data_table, filename='test')
     trace1 = go.Scatter(
         x=df['Time'],
         y=df['Temperature (C)'],

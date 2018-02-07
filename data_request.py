@@ -1,6 +1,10 @@
 import datetime
 import csv
 import os
+import plotly.plotly as py
+import plotly.graph_objs as go
+import plotly.figure_factory as ff
+import pandas as pd
 # RADIO/SERIAL STUFF HERE
 
 
@@ -31,9 +35,44 @@ def log_values(log_dir, time, temp, hum):
         if not file_exists:
             log.writeheader()
         log.writerow({'Time': time, 'Temperature (C)': temp, 'Humidity (%)': hum})
+    return path, date
+
+
+def plot_data(csv_path, date):
+    df = pd.read_csv(csv_path)
+    filename = date + '_graph'
+    data_table = ff.create_table(df.head())
+    py.plot(data_table, filename='04-02-2018_log_chart')
+    trace1 = go.Scatter(
+        x=df['Time'],
+        y=df['Temperature (C)'],
+        name='Temperature (°C)',
+        line={'shape': 'spline'})
+    trace2 = go.Scatter(
+        x=df['Time'],
+        y=df['Humidity (%)'],
+        name='Humidity (%)',
+        yaxis='y2',
+        line={'shape': 'spline'})
+    data = [trace1, trace2]
+    layout = go.Layout(
+        title='04-02-2018 Temperature & Humidity',
+        xaxis=dict(
+            title='Time'),
+        yaxis=dict(
+            title='Temperature (°C)'),
+        yaxis2=dict(
+            title='Humidity (%)',
+            titlefont=dict(color='rgb(148, 103, 189)'),
+            tickfont=dict(color='rgb(148, 103, 189)'),
+            overlaying='y',
+            side='right'))
+    fig = go.Figure(data=data, layout=layout)
+    plot_url = py.plot(fig, filename=filename)
 
 
 if __name__ == '__main__':
     data_package = 170420219050
     timestamp, temperature, humidity = deconstruct(data_package)
-    log_values('logs/', timestamp, temperature, humidity)
+    print(log_values('logs', timestamp, temperature, humidity))
+    plot_data('logs/07-02-2018_log.csv', '07-02-2018')

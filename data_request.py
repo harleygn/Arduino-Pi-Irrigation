@@ -42,7 +42,7 @@ def plot_data(csv_path, date):
     df = pd.read_csv(csv_path)
     filename = date + '_graph'
     data_table = ff.create_table(df.head())
-    py.plot(data_table, filename='04-02-2018_log_chart')
+    py.plot(data_table, filename='test')
     trace1 = go.Scatter(
         x=df['Time'],
         y=df['Temperature (C)'],
@@ -68,11 +68,11 @@ def plot_data(csv_path, date):
             overlaying='y',
             side='right'))
     fig = go.Figure(data=data, layout=layout)
-    plot_url = py.plot(fig, filename=filename)
+    py.plot(fig, filename=filename, auto_open=False)
 
 
 if __name__ == '__main__':
     data_package = 170420219050
     timestamp, temperature, humidity = deconstruct(data_package)
-    print(log_values('logs', timestamp, temperature, humidity))
-    plot_data('logs/07-02-2018_log.csv', '07-02-2018')
+    log_file, date_today = log_values('logs', timestamp, temperature, humidity)
+    plot_data(log_file, date_today)

@@ -68,8 +68,14 @@ def plot_data(csv_path, date):
     py.plot(fig, filename=filename, auto_open=False)
 
 
+def request_data():
+    bin_package = input('Enter sample data (30 bit binary): ')
+    dec_package = int(bin_package, 2)
+    return str(dec_package)
+
+
 if __name__ == '__main__':
-    data_package = '1000205045'
+    data_package = request_data()
     timestamp, temperature, humidity = deconstruct(data_package)
     log_file, date_today = log_values('logs', timestamp, temperature, humidity)
     plot_data(log_file, date_today)

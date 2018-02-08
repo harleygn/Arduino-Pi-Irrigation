@@ -8,15 +8,15 @@ import pandas as pd
 
 
 def deconstruct(data):
-    data = str(data)
-    time = reformat_timestamp(data[:6])
-    temp = int(data[6:10]) / 100
+    data = data
+    time = reformat_timestamp(data[:4])
+    temp = int(data[4:8]) / 100
     hum = data[-2:]
     return time, temp, hum
 
 
 def reformat_timestamp(time_str):
-    formatted_time = time_str[:2] + ':' + time_str[2:4] + ':' + time_str[-2:]
+    formatted_time = time_str[:2] + ':' + time_str[2:4]
     return formatted_time
 
 
@@ -69,7 +69,7 @@ def plot_data(csv_path, date):
 
 
 if __name__ == '__main__':
-    data_package = 170420219050
+    data_package = '1000205045'
     timestamp, temperature, humidity = deconstruct(data_package)
     log_file, date_today = log_values('logs', timestamp, temperature, humidity)
     plot_data(log_file, date_today)

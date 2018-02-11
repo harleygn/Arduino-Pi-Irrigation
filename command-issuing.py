@@ -10,12 +10,12 @@ def read_schedule(schedule_date):
 
 
 def check_timings(schedule):
-    time = datetime.datetime.now()
+    time = datetime.datetime.now().time()
     hour = time.hour
-    morning_start = datetime.datetime.strptime(schedule[0]['start'], '%H:%M:%S')
-    morning_end = datetime.datetime.strptime(schedule[0]['end'], '%H:%M:%S')
-    afternoon_start = datetime.datetime.strptime(schedule[1]['start'], '%H:%M:%S')
-    afternoon_end = datetime.datetime.strptime(schedule[1]['end'], '%H:%M:%S')
+    morning_start = datetime.datetime.strptime(schedule[0]['start'], '%H:%M:%S').time()
+    morning_end = datetime.datetime.strptime(schedule[0]['end'], '%H:%M:%S').time()
+    afternoon_start = datetime.datetime.strptime(schedule[1]['start'], '%H:%M:%S').time()
+    afternoon_end = datetime.datetime.strptime(schedule[1]['end'], '%H:%M:%S').time()
     if hour < 12:
         return morning_start <= time < morning_end
     elif hour >= 12:

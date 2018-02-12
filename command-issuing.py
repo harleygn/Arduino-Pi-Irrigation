@@ -1,5 +1,6 @@
 import datetime
 import json
+import time
 
 
 def read_schedule(schedule_date):
@@ -22,6 +23,24 @@ def check_timings(schedule):
         return afternoon_start <= time < afternoon_end
 
 
+def issue_command(current_state, desired_state):
+    if (current_state is True) and (desired_state is True):
+        print('Tap is already on!')
+        return True
+    elif (current_state is False) and (desired_state is True):
+        print('Tap turned on!')
+        return True
+    elif (current_state is False) and (desired_state is False):
+        print('Tap is already off!')
+        return False
+    elif (current_state is True) and (desired_state is False):
+        print('Tap turned off!')
+        return False
+
+
 if __name__ == '__main__':
     date = date = datetime.datetime.now().strftime("%d-%m-%Y")
-    print(check_timings(read_schedule(date)))
+    tap_state = False
+    while True:
+        tap_state = issue_command(tap_state, check_timings(read_schedule(date)))
+        time.sleep(3)

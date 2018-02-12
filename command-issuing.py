@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime as dt
 import json
 import time
 
@@ -11,16 +11,16 @@ def read_schedule(schedule_date):
 
 
 def check_timings(schedule):
-    time = datetime.datetime.now().time()
-    hour = time.hour
-    morning_start = datetime.datetime.strptime(schedule[0]['start'], '%H:%M:%S').time()
-    morning_end = datetime.datetime.strptime(schedule[0]['end'], '%H:%M:%S').time()
-    afternoon_start = datetime.datetime.strptime(schedule[1]['start'], '%H:%M:%S').time()
-    afternoon_end = datetime.datetime.strptime(schedule[1]['end'], '%H:%M:%S').time()
+    current_time = dt.now().time()
+    hour = current_time.hour
+    morning_start = dt.strptime(schedule[0]['start'], '%H:%M:%S').time()
+    morning_end = dt.strptime(schedule[0]['end'], '%H:%M:%S').time()
+    afternoon_start = dt.strptime(schedule[1]['start'], '%H:%M:%S').time()
+    afternoon_end = dt.strptime(schedule[1]['end'], '%H:%M:%S').time()
     if hour < 12:
-        return morning_start <= time < morning_end
+        return morning_start <= current_time < morning_end
     elif hour >= 12:
-        return afternoon_start <= time < afternoon_end
+        return afternoon_start <= current_time < afternoon_end
 
 
 def issue_command(current_state, desired_state):
@@ -39,7 +39,7 @@ def issue_command(current_state, desired_state):
 
 
 if __name__ == '__main__':
-    date = date = datetime.datetime.now().strftime("%d-%m-%Y")
+    date = date = dt.now().strftime("%d-%m-%Y")
     tap_state = False
     while True:
         tap_state = issue_command(tap_state, check_timings(read_schedule(date)))

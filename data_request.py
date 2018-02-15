@@ -13,7 +13,7 @@ import pandas as pd
 # Breaks down a 10 digit data package into its three components
 def deconstruct(data):
     data = data
-    # Extract the timestamp and convert it into a readable format
+    # Extract the timestamp and convert it into a readable format
     time = reformat_timestamp(data[:4])
     # Extract the temperature value and convert it into a decimal value
     temp = int(data[4:8]) / 100
@@ -30,7 +30,7 @@ def reformat_timestamp(time_str):
     return formatted_time
 
 
-# Write the values to CSV file in labled by date in a specified directory
+# Write the values to CSV file in labeled by date in a specified directory
 def log_values(log_dir, time, temp, hum):
     # Open up the directory
     log_dir = log_dir + '/'
@@ -38,7 +38,7 @@ def log_values(log_dir, time, temp, hum):
     date = datetime.datetime.now().strftime("%d-%m-%Y")
     # Builds a filename with the date and relevant filename
     file_name = date + '_log.csv'
-    # The path variable is created seperately to allow it returned separately
+    # The path variable is created separately to allow it returned separately
     path = log_dir + file_name
     # Checks if the specified directory is present
     if not os.path.exists(log_dir):
@@ -93,7 +93,7 @@ def plot_data(csv_path, date):
     data = [trace1, trace2]
     # Specifies the parameters for the graph figure
     layout = go.Layout(
-        # Creates a graph title for todays data
+        # Creates a graph title for today's data
         title='04-02-2018 Temperature & Humidity',
         # Specifies the X axis title
         xaxis=dict(title='Time'),
@@ -111,13 +111,13 @@ def plot_data(csv_path, date):
     fig = go.Figure(data=data, layout=layout)
     # Plots the figure object to the Plotly API with the given filename
     py.plot(fig, filename=filename, auto_open=False)
+    print('Graphed to Plotly')
 
 
 # Sends the request for the data package
 def request_data():
-    bin_package = input('Enter sample data (30 bit binary): ')
-    dec_package = int(bin_package, 2)
-    return str(dec_package)
+    package = input('Enter sample data: ')
+    return package
 
 
 # Insertion point for the script

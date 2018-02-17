@@ -95,7 +95,7 @@ def plot_data(csv_path, date):
     # Specifies the parameters for the graph figure
     layout = go.Layout(
         # Creates a graph title for today's data
-        title='04-02-2018 Temperature & Humidity',
+        title=(date + ' Temperature & Humidity'),
         # Specifies the X axis title
         xaxis=dict(title='Time'),
         # Specifies the first Y axis title (Temperature)

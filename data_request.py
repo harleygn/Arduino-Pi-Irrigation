@@ -34,7 +34,7 @@ def reformat_timestamp(time_str):
 # Write the values to CSV file in labeled by date in a specified directory
 def log_values(log_dir, time, temp, hum):
     # Open up the directory
-    log_dir = log_dir + '/'
+    log_dir = '/home/pi/Arduino-Pi-Irrigation/' + log_dir + '/'
     # Get today's date in the format DD-MM-YYYY
     date = datetime.datetime.now().strftime("%d-%m-%Y")
     # Builds a filename with the date and relevant filename

@@ -14,13 +14,13 @@ import time
 # Breaks down a 10 digit data package into its three components
 def deconstruct(data):
     data = data
-    # Extract the timestamp and convert it into a readable format
+    # Extracts the timestamp and converts it into a readable format
     time = reformat_timestamp(data[:4])
-    # Extract the temperature value and convert it into a decimal value
+    # Extracts the temperature value and converts it into a decimal value
     temp = int(data[4:8]) / 100
-    # Extra the humidity value
+    # Extracts the humidity value
     hum = data[-2:]
-    # Return all three values to be handled by another function
+    # Returns all three values to be handled by another function
     return time, temp, hum
 
 

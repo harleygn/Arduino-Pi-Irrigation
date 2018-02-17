@@ -7,7 +7,8 @@ import os
 import plotly.plotly as py
 import plotly.graph_objs as go
 import pandas as pd
-# RADIO/SERIAL STUFF HERE
+import serial
+import time
 
 
 # Breaks down a 10 digit data package into its three components
@@ -115,14 +116,25 @@ def plot_data(csv_path, date):
 
 
 # Sends the request for the data package
-def request_data():
+def request_data_test():
     package = input('Enter sample data: ')
+    return package
+
+
+def request_data_serial(serial):
+    time.sleep(1)
+    serial.setDTR(0)
+    time.sleep(1)
+    serial.write(bytes('datarequest\n', 'utf-8'))
+    package = serial.readline().decode().strip()
     return package
 
 
 # Insertion point for the script
 if __name__ == '__main__':
-    data_package = request_data()
+    data_package = request_data_test()
+    # ser = serial.Serial('/dev/ttyACM0', 9600)
+    # data_package = request_data_serial(ser)
     timestamp, temperature, humidity = deconstruct(data_package)
     log_file, date_today = log_values('logs', timestamp, temperature, humidity)
     plot_data(log_file, date_today)

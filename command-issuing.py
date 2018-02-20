@@ -58,7 +58,7 @@ def tap_control(serial, state):
 
 
 if __name__ == '__main__':
-    ser = serial.Serial('/dev/ttyACM0', 9600)
+    ser = serial.Serial('/dev/ttyUSB0', 9600)
     date = date = dt.now().strftime("%d-%m-%Y")
     tap_state = False
     while True:

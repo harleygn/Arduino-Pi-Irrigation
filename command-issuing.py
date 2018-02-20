@@ -1,6 +1,7 @@
 from datetime import datetime as dt
 import json
 import time
+import serial
 
 
 def read_schedule(schedule_date):
@@ -28,17 +29,36 @@ def issue_command(current_state, desired_state):
         print('Tap is already on!')
         return True
     elif (current_state is False) and (desired_state is True):
+        tap_control(serial, desired_state)
         print('Tap turned on!')
         return True
     elif (current_state is False) and (desired_state is False):
         print('Tap is already off!')
         return False
     elif (current_state is True) and (desired_state is False):
+        tap_control(serial, desired_state)
         print('Tap turned off!')
         return False
 
 
+def tap_control(serial, state):
+    connection = False
+    time.sleep(1)
+    serial.setDTR(0)
+    time.sleep(1)
+    while not connection:
+        serial.write(bytes('call\n', 'utf-8'))
+        if serial.readline() == 'response':
+            connection = True
+    if connection:
+        if state:
+            serial.write(bytes('on'))
+        elif not state:
+            serial.write(bytes('off'))
+
+
 if __name__ == '__main__':
+    ser = serial.Serial('/dev/ttyACM0', 9600)
     date = date = dt.now().strftime("%d-%m-%Y")
     tap_state = False
     while True:

@@ -25,20 +25,14 @@ def check_timings(schedule):
 
 
 def issue_command(serial_conn, current_state, desired_state):
-    if (current_state is True) and (desired_state is True):
-        print('Tap is already on!')
-        return True
-    elif (current_state is False) and (desired_state is True):
+    if (current_state is False) and (desired_state is True):
         tap_control(serial_conn, desired_state)
-        print('Tap turned on!')
         return True
-    elif (current_state is False) and (desired_state is False):
-        print('Tap is already off!')
-        return False
     elif (current_state is True) and (desired_state is False):
         tap_control(serial_conn, desired_state)
-        print('Tap turned off!')
         return False
+    else:
+        return current_state
 
 
 def tap_control(serial_conn, state):
@@ -56,9 +50,10 @@ def tap_control(serial_conn, state):
 
 if __name__ == '__main__':
     ser = serial.Serial('/dev/ttyUSB0', 9600)
+    ser = None
     time.sleep(2)
     date = date = dt.now().strftime("%d-%m-%Y")
     tap_state = False
     while True:
         tap_state = issue_command(ser, tap_state, check_timings(read_schedule(date)))
-        time.sleep(3)
+        time.sleep(60)

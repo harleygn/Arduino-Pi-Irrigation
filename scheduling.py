@@ -31,11 +31,13 @@ def check_template_exists(schedule_path):
 
 # Loads a JSON schedule template, configured for a typical day, which is used for comparison
 def load_schedule_template(schedule_path):
+    root = os.path.dirname(os.path.realpath(__file__))
+    schedule_path = root + '/' + schedule_path
     if check_template_exists(schedule_path):
         # Returns the JSON as a a dictionary, allowing it to be modified
         with open(schedule_path, "r") as template:
             schedule = json.load(template)  # The schedule template
-        return schedule
+        return schedule, root
     # Returns an error if the template is not found
     else:
         print("Schedule not found")
@@ -71,12 +73,11 @@ def adjust_time(schedule_template, weather_forecast):
 
 
 # Saves a the new schedule as JSON, named according the the date, for use by other programs
-def save_schedule(updated_schedule, schedule_dir):
-    root = os.path.dirname(os.path.realpath(__file__))
+def save_schedule(updated_schedule, project_root, schedule_dir):
     # Gets the current date
     date = datetime.datetime.now().strftime("%d-%m-%Y")
     # Formulates an appropriate file name in the specified directory
-    path = root + '/' + schedule_dir + '/' + date + "_schedule.json"
+    path = project_root + '/' + schedule_dir + '/' + date + "_schedule.json"
     # Creates the new JSON file
     with open(path, 'w') as write_schedule:
         # Exports the JSON data to the file and saves it
@@ -86,10 +87,10 @@ def save_schedule(updated_schedule, schedule_dir):
 # Entry point for the script
 if __name__ == "__main__":
     # Specifies location of the template schedule
-    defaults = load_schedule_template("schedules/schedule_template.json")
+    defaults, root = load_schedule_template("schedules/schedule_template.json")
     # Specifies the key and location to be used in the Wunderground API call
     forecast = get_forecast_data("1fbed46a06fcec66", "UK/Chilwell")
     # Creates the new schedule as a dictionary object
     new_schedule = adjust_time(defaults, forecast)
     # Saves the new schedule
-    save_schedule(new_schedule, 'schedules')
+    save_schedule(new_schedule, root, 'schedules')

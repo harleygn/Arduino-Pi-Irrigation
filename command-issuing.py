@@ -48,13 +48,13 @@ def tap_control(serial, state):
     time.sleep(1)
     while not connection:
         serial.write(bytes('call\n', 'utf-8'))
-        if serial.readline() == 'response':
+        if serial.readline().decode().strip() == 'response':
             connection = True
     if connection:
         if state:
-            serial.write(bytes('on'))
+            serial.write(bytes('on\n', 'utf-8'))
         elif not state:
-            serial.write(bytes('off'))
+            serial.write(bytes('off\n', 'utf-8'))
 
 
 if __name__ == '__main__':

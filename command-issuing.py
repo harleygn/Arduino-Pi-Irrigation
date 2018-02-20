@@ -43,9 +43,6 @@ def issue_command(current_state, desired_state):
 
 def tap_control(serial, state):
     connection = False
-    time.sleep(1)
-    serial.setDTR(0)
-    time.sleep(1)
     while not connection:
         serial.write(bytes('call\n', 'utf-8'))
         if serial.readline().decode().strip() == 'response':
@@ -59,6 +56,7 @@ def tap_control(serial, state):
 
 if __name__ == '__main__':
     ser = serial.Serial('/dev/ttyUSB0', 9600)
+    time.sleep(2)
     date = date = dt.now().strftime("%d-%m-%Y")
     tap_state = False
     while True:

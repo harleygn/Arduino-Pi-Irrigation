@@ -33,8 +33,9 @@ def reformat_timestamp(time_str):
 
 # Write the values to CSV file in labeled by date in a specified directory
 def log_values(log_dir, time, temp, hum):
+    root = os.path.dirname(os.path.realpath(__file__))
     # Open up the directory
-    log_dir = '/home/pi/Arduino-Pi-Irrigation/' + log_dir + '/'
+    log_dir = root + '/' + log_dir + '/'
     # Get today's date in the format DD-MM-YYYY
     date = datetime.datetime.now().strftime("%d-%m-%Y")
     # Builds a filename with the date and relevant filename
@@ -87,9 +88,7 @@ def plot_data(csv_path, date):
         # Names the plot, shown in the legend
         name='Humidity (%)',
         # Indicates that this is a secondary Y axis
-        yaxis='y2',
-        # Specifies the shape of the plot, spline meaning curved
-        line={'shape': 'spline'})
+        yaxis='y2')
     # Combines the two trace objects
     data = [trace1, trace2]
     # Specifies the parameters for the graph figure
@@ -132,9 +131,9 @@ def request_data_serial(serial):
 
 # Insertion point for the script
 if __name__ == '__main__':
-    data_package = request_data_test()
-    # ser = serial.Serial('/dev/ttyACM0', 9600)
-    # data_package = request_data_serial(ser)
+    # data_package = request_data_test()
+    ser = serial.Serial('/dev/ttyACM0', 9600)
+    data_package = request_data_serial(ser)
     timestamp, temperature, humidity = deconstruct(data_package)
     log_file, date_today = log_values('logs', timestamp, temperature, humidity)
     plot_data(log_file, date_today)

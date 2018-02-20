@@ -2,6 +2,7 @@
 import requests
 import json
 import datetime
+import os
 
 
 def get_forecast_data(api_key, location):
@@ -71,10 +72,11 @@ def adjust_time(schedule_template, weather_forecast):
 
 # Saves a the new schedule as JSON, named according the the date, for use by other programs
 def save_schedule(updated_schedule, schedule_dir):
+    root = os.path.dirname(os.path.realpath(__file__))
     # Gets the current date
     date = datetime.datetime.now().strftime("%d-%m-%Y")
     # Formulates an appropriate file name in the specified directory
-    path = schedule_dir + '/' + date + "_schedule.json"
+    path = root + '/' + schedule_dir + '/' + date + "_schedule.json"
     # Creates the new JSON file
     with open(path, 'w') as write_schedule:
         # Exports the JSON data to the file and saves it

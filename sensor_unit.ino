@@ -24,8 +24,10 @@ time_t gmt, local;
 
 // Declares an empty string to hold incoming data
 String inputString = "";
-// Declares a Boolean flag indicating whether the incoming string is complete
+// Indicates whether the incoming string is complete
 boolean stringComplete = false;
+// Indicates the connection status to the hub
+boolean connection = false;
 
 // Initializes the DHT sensor
 DHT dht(DHTPIN, DHTTYPE);
@@ -53,15 +55,26 @@ void loop() {
   if (stringComplete) {
     // Trims off the new line ending characters
     inputString.trim();
-    // If the received command matches the data request command
-    if (inputString == "datarequest") {
-      // Pointer for accessing members of class instance
-      // Builds the data package from the timestamp and sensor readings
-      String dataPackage = (buildTime(local, tcr -> abbrev)) + getReadings();
-      // Sends the data package over serial
-      Serial.println(dataPackage);
-      Serial.println("");
+    // If the controller receives a call
+    if (inputString == "call") {
+      // Returns a response to initiate connection
+      Serial.println("response");
+      // Sets the connection status
+      connection = true;
     }
+    if (stringComplete and connection) {
+      // If the received command matches the data request command
+      if (inputString == "datarequest") {
+        // Pointer for accessing members of class instance
+        // Builds the data package from the timestamp and sensor readings
+        String dataPackage = (buildTime(local, tcr -> abbrev)) + getReadings();
+        // Sends the data package over serial
+        Serial.println(dataPackage);
+        // Resets the Boolean flag
+        connection = false;
+      }
+    }
+
     // Clears the input string for new data
     inputString = "";
     // Resets the Boolean flag

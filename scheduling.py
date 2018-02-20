@@ -31,13 +31,13 @@ def check_template_exists(schedule_path):
 
 # Loads a JSON schedule template, configured for a typical day, which is used for comparison
 def load_schedule_template(schedule_path):
-    root = os.path.dirname(os.path.realpath(__file__))
-    schedule_path = root + '/' + schedule_path
+    project_root = os.path.dirname(os.path.realpath(__file__))
+    schedule_path = project_root + '/' + schedule_path
     if check_template_exists(schedule_path):
         # Returns the JSON as a a dictionary, allowing it to be modified
         with open(schedule_path, "r") as template:
             schedule = json.load(template)  # The schedule template
-        return schedule, root
+        return schedule, project_root
     # Returns an error if the template is not found
     else:
         print("Schedule not found")

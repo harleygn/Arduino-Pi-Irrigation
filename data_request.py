@@ -15,13 +15,13 @@ import time
 def deconstruct(data):
     data = data
     # Extracts the timestamp and converts it into a readable format
-    time = reformat_timestamp(data[:4])
+    formatted_timestamp = reformat_timestamp(data[:4])
     # Extracts the temperature value and converts it into a decimal value
     temp = int(data[4:8]) / 100
     # Extracts the humidity value
     hum = data[-2:]
     # Returns all three values to be handled by another function
-    return time, temp, hum
+    return formatted_timestamp, temp, hum
 
 
 # Reformats a 4 digit timestamp (HHMM) into a readable format (HH:MM)
@@ -32,7 +32,7 @@ def reformat_timestamp(time_str):
 
 
 # Write the values to CSV file in labeled by date in a specified directory
-def log_values(log_dir, time, temp, hum):
+def log_values(log_dir, time_val, temp, hum):
     root = os.path.dirname(os.path.realpath(__file__))
     # Open up the directory
     log_dir = root + '/' + log_dir + '/'
@@ -58,7 +58,7 @@ def log_values(log_dir, time, temp, hum):
         if not file_exists:
             log.writeheader()
         # The writes the log data the relevant columns
-        log.writerow({'Time': time, 'Temperature (C)': temp, 'Humidity (%)': hum})
+        log.writerow({'Time': time_val, 'Temperature (C)': temp, 'Humidity (%)': hum})
     # Returns the path of the log file and the current date
     return path, date
 
@@ -120,12 +120,17 @@ def request_data_test():
     return package
 
 
-def request_data_serial(serial):
+def request_data_serial(serial_conn):
+    connection = False
     time.sleep(1)
-    serial.setDTR(0)
+    serial_conn.setDTR(0)
     time.sleep(1)
-    serial.write(bytes('datarequest\n', 'utf-8'))
-    package = serial.readline().decode().strip()
+    while not connection:
+        serial_conn.write(bytes('call\n', 'utf-8'))
+        if serial_conn.readline().decode().strip() == 'response':
+            connection = True
+    serial_conn.write(bytes('datarequest\n', 'utf-8'))
+    package = serial_conn.readline().decode().strip()
     return package
 
 

@@ -24,34 +24,34 @@ def check_timings(schedule):
         return afternoon_start <= current_time < afternoon_end
 
 
-def issue_command(current_state, desired_state):
+def issue_command(serial_conn, current_state, desired_state):
     if (current_state is True) and (desired_state is True):
         print('Tap is already on!')
         return True
     elif (current_state is False) and (desired_state is True):
-        tap_control(serial, desired_state)
+        tap_control(serial_conn, desired_state)
         print('Tap turned on!')
         return True
     elif (current_state is False) and (desired_state is False):
         print('Tap is already off!')
         return False
     elif (current_state is True) and (desired_state is False):
-        tap_control(serial, desired_state)
+        tap_control(serial_conn, desired_state)
         print('Tap turned off!')
         return False
 
 
-def tap_control(serial, state):
+def tap_control(serial_conn, state):
     connection = False
     while not connection:
-        serial.write(bytes('call\n', 'utf-8'))
-        if serial.readline().decode().strip() == 'response':
+        serial_conn.write(bytes('call\n', 'utf-8'))
+        if serial_conn.readline().decode().strip() == 'response':
             connection = True
     if connection:
         if state:
-            serial.write(bytes('on\n', 'utf-8'))
+            serial_conn.write(bytes('on\n', 'utf-8'))
         elif not state:
-            serial.write(bytes('off\n', 'utf-8'))
+            serial_conn.write(bytes('off\n', 'utf-8'))
 
 
 if __name__ == '__main__':
@@ -60,5 +60,5 @@ if __name__ == '__main__':
     date = date = dt.now().strftime("%d-%m-%Y")
     tap_state = False
     while True:
-        tap_state = issue_command(tap_state, check_timings(read_schedule(date)))
+        tap_state = issue_command(ser, tap_state, check_timings(read_schedule(date)))
         time.sleep(3)

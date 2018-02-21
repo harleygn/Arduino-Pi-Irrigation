@@ -1,0 +1,14 @@
+h1, h2, li, p {
+    font-family: "Helvetica Neue", sans-serif;
+    color: #95989A;
+}
+
+body {
+    margin-left: 5em;
+    margin-right: 5em;
+}
+
+#schedule {
+    position: absolute;
+    right: 20em;
+}

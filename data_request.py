@@ -88,7 +88,9 @@ def plot_data(csv_path, date):
         # Names the plot, shown in the legend
         name='Humidity (%)',
         # Indicates that this is a secondary Y axis
-        yaxis='y2')
+        yaxis='y2',
+        # Specifies the shape of the plot, spline meaning curved
+        line={'shape': 'spline'})
     # Combines the two trace objects
     data = [trace1, trace2]
     # Specifies the parameters for the graph figure

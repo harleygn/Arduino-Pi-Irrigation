@@ -11,6 +11,7 @@ def read_schedule(schedule_date):
     return schedule['schedule']
 
 
+# Checks whether a the schedule should be active
 def check_timings(schedule):
     current_time = dt.now().time()
     hour = current_time.hour

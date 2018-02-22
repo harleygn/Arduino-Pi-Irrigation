@@ -1,7 +1,7 @@
 # Import modules for handling API calls, JSON files and date/time objects
 import requests
 import json
-import datetime
+import datetime as dt
 
 
 def get_forecast_data(api_key, location):
@@ -43,9 +43,9 @@ def load_schedule_template(schedule_path):
 # Adjusts a timestamp by a given number of minutes
 def add_minutes(time, minutes):
     # Converts the input time as a formatted datetime object
-    default_time = datetime.datetime.strptime(time, "%H:%M:%S")
+    default_time = dt.datetime.strptime(time, "%H:%M:%S")
     # Increases the time by adding the specified minutes as timedelta object
-    new_time = default_time + datetime.timedelta(minutes=minutes)
+    new_time = default_time + dt.timedelta(minutes=minutes)
     # Returns the new time in the correct format
     return new_time.strftime("%H:%M:%S")
 
@@ -62,19 +62,30 @@ def adjust_time(schedule_template, weather_forecast):
     # Adjusts the end time according the temperature differential
     end_time = add_minutes(end_time, adjustment_level)
     # Adjusts the duration to match the start and end times
-    duration = datetime.datetime.strptime(end_time, "%H:%M:%S") - datetime.datetime.strptime(start_time, "%H:%M:%S")
+    duration = dt.datetime.strptime(end_time, "%H:%M:%S") - dt.datetime.strptime(start_time, "%H:%M:%S")
     # Schedule is altered with new calculations
     schedule_template["schedule"][0]["end"] = str(end_time)
     schedule_template["schedule"][0]["duration"] = str(duration)
-    return schedule_template
+    schedule = update_forecast(schedule_template, weather_forecast)
+    return schedule
+
+
+# Records the weather forecast data to the JSON schedule
+def update_forecast(schedule, weather_forecast):
+    # Extracts and assigns the data from the forecast to the schedule
+    schedule['conditions']['high_temp'] = weather_forecast['high_temp']
+    schedule['conditions']['low_temp'] = weather_forecast['low_temp']
+    schedule['conditions']['humidity'] = weather_forecast['average_hum']
+    # Returns the now fully updated schedule for saving
+    return schedule
 
 
 # Saves a the new schedule as JSON, named according the the date, for use by other programs
 def save_schedule(updated_schedule, schedule_dir):
     # Gets the current date
-    date = datetime.datetime.now().strftime("%d-%m-%Y")
+    date = dt.datetime.now().strftime('%d-%m-%Y')
     # Formulates an appropriate file name in the specified directory
-    path = schedule_dir + '/' + date + "_schedule.json"
+    path = schedule_dir + '/' + date + '_schedule.json'
     # Creates the new JSON file
     with open(path, 'w') as write_schedule:
         # Exports the JSON data to the file and saves it
@@ -82,7 +93,7 @@ def save_schedule(updated_schedule, schedule_dir):
 
 
 # Entry point for the script
-if __name__ == "__main__":
+if __name__ == '__main__':
     # Specifies location of the template schedule
     defaults = load_schedule_template("schedules/schedule_template.json")
     # Specifies the key and location to be used in the Wunderground API call

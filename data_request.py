@@ -9,6 +9,7 @@ import plotly.graph_objs as go
 import pandas as pd
 import serial
 import time
+import plotly.offline as offline
 
 
 # Breaks down a 10 digit data package into its three components
@@ -33,9 +34,9 @@ def reformat_timestamp(time_str):
 
 # Write the values to CSV file in labeled by date in a specified directory
 def log_values(log_dir, time_val, temp, hum):
-    root = os.path.dirname(os.path.realpath(__file__))
+    project_root = os.path.dirname(os.path.realpath(__file__))
     # Open up the directory
-    log_dir = root + '/' + log_dir + '/'
+    log_dir = project_root + '/' + log_dir + '/'
     # Get today's date in the format DD-MM-YYYY
     date = datetime.datetime.now().strftime("%d-%m-%Y")
     # Builds a filename with the date and relevant filename
@@ -60,15 +61,19 @@ def log_values(log_dir, time_val, temp, hum):
         # The writes the log data the relevant columns
         log.writerow({'Time': time_val, 'Temperature (C)': temp, 'Humidity (%)': hum})
     # Returns the path of the log file and the current date
-    return path, date
+    return project_root, path, date
 
 
 # Plots the current logs to a time-series graph with a double Y axis, saved to the Plotly API
-def plot_data(csv_path, date):
+def plot_data(project_root, csv_path, date):
     # Loads the current CSV log file
     df = pd.read_csv(csv_path)
+    # Checks if the graph directory is present
+    if not os.path.exists('graphs'):
+        # If not, it is created
+        os.makedirs('graphs')
     # Creates a matching filename for the graph
-    filename = date + '_graph'
+    filename = project_root + '/graphs/' + date + '_graph' + '.html'
     # Specifies the parameters for the first line plot (Temperature)
     trace1 = go.Scatter(
         # Loads the time values as the X axis
@@ -112,7 +117,7 @@ def plot_data(csv_path, date):
     # Builds the figure object with the previously defined data and layout
     fig = go.Figure(data=data, layout=layout)
     # Plots the figure object to the Plotly API with the given filename
-    py.plot(fig, filename=filename, auto_open=False)
+    offline.plot(fig, filename=filename, auto_open=False)
     print('Graphed to Plotly')
 
 
@@ -142,5 +147,5 @@ if __name__ == '__main__':
     ser = serial.Serial('/dev/ttyACM0', 9600)
     data_package = request_data_serial(ser)
     timestamp, temperature, humidity = deconstruct(data_package)
-    log_file, date_today = log_values('logs', timestamp, temperature, humidity)
-    plot_data(log_file, date_today)
+    root, log_file, date_today = log_values('logs', timestamp, temperature, humidity)
+    plot_data(root, log_file, date_today)

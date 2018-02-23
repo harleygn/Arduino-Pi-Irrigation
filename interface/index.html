@@ -4,16 +4,41 @@
     <meta charset="UTF-8">
     <title>Arduino-Pi-Irrigation</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script>
+        function getDate() {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+
+            var yyyy = today.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+
+            return dd + '-' + mm + '-' + yyyy;
+        }
+        function getGraphName() {
+            return '../graphs/' + getDate() + '_graph.html'
+        }
+        window.onload = function() {
+            document.getElementById("today").innerHTML = getGraphName();
+            document.getElementById("graphFrame").src = getGraphName();
+        };
+    </script>
 </head>
 <body>
     <h1>Polytunnel Irrigation</h1>
-    <div>
+    <div id="graph">
         <h2>Latest data</h2>
-        <iframe width="1000" height="600ems" frameborder="0" scrolling="no" src="//plot.ly/~harleygn/83.embed"></iframe>
+        <iframe id="graphFrame" width="800" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
     <div>
         <h2>Historical data</h2>
         <ul>
+            <li id="today"></li>
             <li>Yesterday</li>
         </ul>
     </div>

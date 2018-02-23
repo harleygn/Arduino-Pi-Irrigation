@@ -24,27 +24,33 @@
             return '../graphs/' + getDate() + '_graph.html'
         }
         window.onload = function() {
-            document.getElementById("today").innerHTML = getGraphName();
-            document.getElementById("graphFrame").src = getGraphName();
+            document.getElementById("today").innerHTML = getDate();
+            document.getElementById("graph-frame").src = getGraphName();
         };
     </script>
 </head>
 <body>
     <h1>Polytunnel Irrigation</h1>
-    <div id="graph">
-        <h2>Latest data</h2>
-        <iframe id="graphFrame" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+    <div id="wrapper">
+        <div id="leftcolumn">
+            <div id="graph">
+                <h2>Latest data</h2>
+                <iframe id="graph-frame" width="1200" height="600" frameborder="0" scrolling="no"></iframe>
+            </div>
+            <div>
+                <h2>Historical data</h2>
+                <ul>
+                    <li id="today"></li>
+                    <li>Yesterday</li>
+                </ul>
+            </div>
+        </div>
+        <div id="rightcolumn">
+            <h2>Live schedule</h2>
+            <p>JSON stuff here</p>
+        </div>
+
     </div>
-    <div>
-        <h2>Historical data</h2>
-        <ul>
-            <li id="today"></li>
-            <li>Yesterday</li>
-        </ul>
-    </div>
-    <div id="schedule">
-        <h2>Live schedule</h2>
-        <p>JSON stuff goes here</p>
-    </div>
+
 </body>
 </html>

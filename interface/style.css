@@ -6,10 +6,27 @@ h1, h2, li, p {
 body {
     margin-left: 5em;
 }
+#wrapper {
+    width: 1505px;
+    position: relative;
+}
 
-#schedule {
+#leftcolumn, #rightcolumn {
+    min-height: 750px;
+    color: white;
+}
+
+#leftcolumn {
+    width: 1200px;
+    min-height: 100px;
     position: fixed;
-    left: 70em;
-    right: 20em;
-    top: 4em;
+}
+
+#rightcolumn {
+    width: 250px;
+    float: right;
+}
+
+#graph-frame {
+    border: 1px solid #95989A;
 }

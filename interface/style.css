@@ -4,7 +4,7 @@ h1, h2, h3, li, p, table {
 }
 
 body {
-    margin-left: 5em;
+    margin-left: 40px;
 }
 #wrapper {
     width: 1505px;
@@ -13,13 +13,14 @@ body {
 
 #left-column {
     width: 1000px;
-    min-height: 100px;
     position: absolute;
 }
 
 #right-column {
     width: 500px;
     float: right;
+    padding-left: 40px;
+    box-sizing: border-box;
 }
 
 #graph-frame {
@@ -27,8 +28,7 @@ body {
 }
 
 #schedules {
-    padding-left: 20px;
-    width: 500px;
+    width: auto;
 }
 
 table, th, td {

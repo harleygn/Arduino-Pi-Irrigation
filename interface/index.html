@@ -4,53 +4,55 @@
     <meta charset="UTF-8">
     <title>Arduino-Pi-Irrigation</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script>
-        function getDate() {
-            var today = new Date();
-            var dd = today.getDate();
-            var mm = today.getMonth() + 1; //January is 0!
-
-            var yyyy = today.getFullYear();
-            if (dd < 10) {
-                dd = '0' + dd;
-            }
-            if (mm < 10) {
-                mm = '0' + mm;
-            }
-
-            return dd + '-' + mm + '-' + yyyy;
-        }
-        function getGraphName() {
-            return '../graphs/' + getDate() + '_graph.html'
-        }
-        window.onload = function() {
-            document.getElementById("today").innerHTML = getDate();
-            document.getElementById("graph-frame").src = getGraphName();
-        };
-    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="scripting.js"></script>
 </head>
 <body>
-    <h1>Polytunnel Irrigation</h1>
-    <div id="wrapper">
-        <div id="leftcolumn">
-            <div id="graph">
-                <h2>Latest data</h2>
-                <iframe id="graph-frame" width="1200" height="600" frameborder="0" scrolling="no"></iframe>
-            </div>
-            <div>
-                <h2>Historical data</h2>
-                <ul>
-                    <li id="today"></li>
-                    <li>Yesterday</li>
-                </ul>
-            </div>
+<h1>Polytunnel Irrigation</h1>
+<div id="wrapper">
+    <div id="left-column">
+        <div id="graph">
+            <h2>Latest data</h2>
+            <iframe id="graph-frame" width="1000" height="500" frameborder="0" scrolling="no"></iframe>
         </div>
-        <div id="rightcolumn">
+        <div>
+            <h2>Historical data</h2>
+            <ul>
+                <li id="today"></li>
+                <li>Yesterday</li>
+            </ul>
+        </div>
+    </div>
+    <div id="right-column">
+        <div id="schedules">
             <h2>Live schedule</h2>
-            <p>JSON stuff here</p>
+            <table>
+                <tr>
+                    <th colspan="2">Morning</th>
+                    <th colspan="2">Afternoon</th>
+                </tr>
+                <tr>
+                    <td>Starts:</td>
+                    <td id="morn-start">[time]</td>
+                    <td>Starts:</td>
+                    <td id="aft-start">[time]</td>
+                </tr>
+                <tr>
+                    <td>Finishes:</td>
+                    <td id="morn-end">[time]</td>
+                    <td>Finishes:</td>
+                    <td id="aft-end">[time]</td>
+                </tr>
+                <tr>
+                    <td>Duration:</td>
+                    <td id="morn-dur">[time]</td>
+                    <td>Duration:</td>
+                    <td id="aft-dur">[time]</td>
+                </tr>
+            </table>
         </div>
 
     </div>
-
+</div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-h1, h2, li, p {
+h1, h2, h3, li, p, table {
     font-family: "Helvetica Neue", sans-serif;
     color: #95989A;
 }
@@ -11,22 +11,39 @@ body {
     position: relative;
 }
 
-#leftcolumn, #rightcolumn {
-    min-height: 750px;
-    color: white;
-}
-
-#leftcolumn {
-    width: 1200px;
+#left-column {
+    width: 1000px;
     min-height: 100px;
-    position: fixed;
+    position: absolute;
 }
 
-#rightcolumn {
-    width: 250px;
+#right-column {
+    width: 500px;
     float: right;
 }
 
 #graph-frame {
     border: 1px solid #95989A;
+}
+
+#schedules {
+    padding-left: 20px;
+    width: 500px;
+}
+
+table, th, td {
+    border-collapse: collapse;
+    text-align: left;
+}
+
+table {
+    width: 100%;
+}
+
+th {
+    font-size: large;
+}
+td {
+    padding-top: 15px;
+    padding-bottom: 5px;
 }

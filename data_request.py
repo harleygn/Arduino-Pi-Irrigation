@@ -69,11 +69,11 @@ def plot_data(project_root, csv_path, date):
     # Loads the current CSV log file
     df = pd.read_csv(csv_path)
     # Checks if the graph directory is present
-    if not os.path.exists('graphs'):
+    if not os.path.exists('interface/graphs'):
         # If not, it is created
-        os.makedirs('graphs')
+        os.makedirs('interface/graphs')
     # Creates a matching filename for the graph
-    filename = project_root + '/graphs/' + date + '_graph'
+    filename = project_root + '/interface/graphs/' + date + '_graph'
     # Specifies the parameters for the first line plot (Temperature)
     trace1 = go.Scatter(
         # Loads the time values as the X axis

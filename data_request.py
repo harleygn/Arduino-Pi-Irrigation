@@ -73,7 +73,7 @@ def plot_data(project_root, csv_path, date):
         # If not, it is created
         os.makedirs('graphs')
     # Creates a matching filename for the graph
-    filename = project_root + '/graphs/' + date + '_graph' + '.html'
+    filename = project_root + '/graphs/' + date + '_graph'
     # Specifies the parameters for the first line plot (Temperature)
     trace1 = go.Scatter(
         # Loads the time values as the X axis
@@ -117,7 +117,8 @@ def plot_data(project_root, csv_path, date):
     # Builds the figure object with the previously defined data and layout
     fig = go.Figure(data=data, layout=layout)
     # Plots the figure object to the Plotly API with the given filename
-    offline.plot(fig, filename=filename, auto_open=False)
+    offline.plot(fig, filename=(filename + '.html'), auto_open=False)
+    py.plot(fig, filename='test', auto_open=False)
     print('Graphed to Plotly')
 
 

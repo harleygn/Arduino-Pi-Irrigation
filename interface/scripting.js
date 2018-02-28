@@ -1,8 +1,7 @@
-function getDate() {
+function getDate(difference) {
     let today = new Date();
-    let dd = today.getDate();
+    let dd = today.getDate() - difference;
     let mm = today.getMonth() + 1; //January is 0!
-
     let yyyy = today.getFullYear();
     if (dd < 10) {
         dd = '0' + dd;
@@ -34,6 +33,13 @@ $(document).ready(function () {
 });
 
 window.onload = function () {
-    document.getElementById("today").innerHTML = getDate();
+    document.getElementById("today").innerHTML = getDate(0);
+    document.getElementById("1-day-prev").innerHTML = getDate(1);
+    document.getElementById("2-day-prev").innerHTML = getDate(2);
+    document.getElementById("3-day-prev").innerHTML = getDate(3);
+    document.getElementById("4-day-prev").innerHTML = getDate(4);
+    document.getElementById("5-day-prev").innerHTML = getDate(5);
+    document.getElementById("6-day-prev").innerHTML = getDate(6);
+    document.getElementById("7-day-prev").innerHTML = getDate(7);
     document.getElementById("graph-frame").src = getGraphName();
 };

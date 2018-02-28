@@ -122,31 +122,63 @@ def plot_data(project_root, csv_path, date):
     print('Graphed to Plotly')
 
 
-# Sends the request for the data package
-def request_data_test():
-    package = input('Enter sample data: ')
+# Requests a data package via serial or input
+def request_data():
+    package_valid = False
+    serial_conn = check_connection()
+    while not package_valid:
+        if not serial_conn:
+            package = input('Enter sample data: ')
+        else:
+            connection = False
+            time.sleep(1)
+            serial_conn.setDTR(0)
+            time.sleep(1)
+            while not connection:
+                serial_conn.write(bytes('call\n', 'utf-8'))
+                if serial_conn.readline().decode().strip() == 'response':
+                    connection = True
+            serial_conn.write(bytes('datarequest\n', 'utf-8'))
+            package = serial_conn.readline().decode().strip()
+        package_valid = validate_data(package)
     return package
 
 
-def request_data_serial(serial_conn):
-    connection = False
-    time.sleep(1)
-    serial_conn.setDTR(0)
-    time.sleep(1)
-    while not connection:
-        serial_conn.write(bytes('call\n', 'utf-8'))
-        if serial_conn.readline().decode().strip() == 'response':
-            connection = True
-    serial_conn.write(bytes('datarequest\n', 'utf-8'))
-    package = serial_conn.readline().decode().strip()
-    return package
+# Receiving-end validation checks that the package is in the correct format
+def validate_data(package):
+    valid = isinstance(package, str)
+    if len(package) != 10:
+        valid = False
+    elif int(package[:2]) > 23:
+        valid = False
+    elif int(package[2:4]) > 59:
+        valid = False
+    elif int(package[4:8]) > 4000:
+        valid = False
+    elif int(package[-2:]) > 99:
+        valid = False
+    if not valid:
+        print('Invalid data package')
+        return False
+    else:
+        return True
+
+
+# Attempts to open serial port, defaults to manual input
+def check_connection():
+    try:
+        serial_conn = serial.Serial('/dev/ttyACM0', 9600)
+    except serial.serialutil.SerialException:
+        try:
+            serial_conn = serial.Serial('/dev/ttyUSB0', 9600)
+        except serial.serialutil.SerialException:
+            serial_conn = False
+    return serial_conn
 
 
 # Insertion point for the script
 if __name__ == '__main__':
-    # data_package = request_data_test()
-    ser = serial.Serial('/dev/ttyACM0', 9600)
-    data_package = request_data_serial(ser)
+    data_package = request_data()
     timestamp, temperature, humidity = deconstruct(data_package)
     root, log_file, date_today = log_values('logs', timestamp, temperature, humidity)
     plot_data(root, log_file, date_today)

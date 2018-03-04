@@ -14,8 +14,8 @@ function getDate(difference) {
     return dd + '-' + mm + '-' + yyyy;
 }
 
-function getGraphName() {
-    return '../graphs/' + getDate(0) + '_graph.html'
+function getChartName() {
+    return './charts/' + getDate(0) + '_chart.html'
 }
 
 
@@ -42,5 +42,5 @@ window.onload = function () {
     document.getElementById("4-day-prev").innerHTML = getDate(4);
     document.getElementById("5-day-prev").innerHTML = getDate(5);
     document.getElementById("6-day-prev").innerHTML = getDate(6);
-    document.getElementById("graph-frame").src = getGraphName();
+    document.getElementById("chart-frame").src = getChartName();
 };

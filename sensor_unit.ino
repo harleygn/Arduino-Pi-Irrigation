@@ -8,7 +8,7 @@
 // BST begins on the last Sunday of March
 TimeChangeRule myBST = {"BST", Last, Sun, Mar, 1, +60};
 // UTC returns on the last Sunday in October
-TimeChangeRule myGMT = {"UTC", Last, Sun, Oct, 1, -60};
+TimeChangeRule myGMT = {"UTC", Last, Sun, Oct, 1, +0};
 // Creates timezone object with the rules set above
 Timezone myTZ(myBST, myGMT);
 

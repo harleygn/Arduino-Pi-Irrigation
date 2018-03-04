@@ -1,8 +1,9 @@
 function getDate(difference) {
-    let today = new Date();
-    let dd = today.getDate() - difference;
-    let mm = today.getMonth() + 1; //January is 0!
-    let yyyy = today.getFullYear();
+    let date = new Date();
+    date.setDate(date.getDate() - difference)
+    let dd = date.getDate()
+    let mm = date.getMonth() + 1; //January is 0!
+    let yyyy = date.getFullYear();
     if (dd < 10) {
         dd = '0' + dd;
     }
@@ -14,8 +15,9 @@ function getDate(difference) {
 }
 
 function getGraphName() {
-    return '../graphs/' + getDate() + '_graph.html'
+    return '../graphs/' + getDate(0) + '_graph.html'
 }
+
 
 $(document).ready(function () {
     $.ajax({
@@ -40,6 +42,5 @@ window.onload = function () {
     document.getElementById("4-day-prev").innerHTML = getDate(4);
     document.getElementById("5-day-prev").innerHTML = getDate(5);
     document.getElementById("6-day-prev").innerHTML = getDate(6);
-    document.getElementById("7-day-prev").innerHTML = getDate(7);
     document.getElementById("graph-frame").src = getGraphName();
 };

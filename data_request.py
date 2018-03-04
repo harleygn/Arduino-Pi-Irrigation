@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Import modules for handling date/time objects, CSV files, OS commands and graphs
+# Import modules for handling date/time objects, CSV files, OS commands and charts
 import datetime
 import csv
 import os
@@ -36,7 +36,7 @@ def reformat_timestamp(time_str):
 def log_values(log_dir, time_val, temp, hum):
     project_root = os.path.dirname(os.path.realpath(__file__))
     # Open up the directory
-    log_dir = project_root + '/' + log_dir + '/'
+    log_dir = '{}/{}/'.format(project_root, log_dir)
     # Get today's date in the format DD-MM-YYYY
     date = datetime.datetime.now().strftime("%d-%m-%Y")
     # Builds a filename with the date and relevant filename
@@ -64,16 +64,21 @@ def log_values(log_dir, time_val, temp, hum):
     return project_root, path, date
 
 
-# Plots the current logs to a time-series graph with a double Y axis, saved to the Plotly API
+# Plots the current logs to a time-series chart with a double Y axis, saved to the Plotly API
 def plot_data(project_root, csv_path, date):
+    chart_dir = project_root + '/interface/charts/'
     # Loads the current CSV log file
-    df = pd.read_csv(csv_path)
-    # Checks if the graph directory is present
-    if not os.path.exists('interface/graphs'):
+    # Raises an error if the file cannot be found
+    try:
+        df = pd.read_csv(csv_path)
+    except FileNotFoundError:
+        print('CSV file for {} not found'.format(date))
+    # Checks if the chart directory is present
+    if not os.path.exists(chart_dir):
         # If not, it is created
-        os.makedirs('interface/graphs')
-    # Creates a matching filename for the graph
-    filename = project_root + '/interface/graphs/' + date + '_graph'
+        os.makedirs(chart_dir)
+    # Formats a matching filename for the chart
+    filename = '{}/interface/charts/{}_chart'.format(project_root, date)
     # Specifies the parameters for the first line plot (Temperature)
     trace1 = go.Scatter(
         # Loads the time values as the X axis
@@ -98,9 +103,9 @@ def plot_data(project_root, csv_path, date):
         line={'shape': 'spline'})
     # Combines the two trace objects
     data = [trace1, trace2]
-    # Specifies the parameters for the graph figure
+    # Specifies the parameters for the chart figure
     layout = go.Layout(
-        # Creates a graph title for today's data
+        # Creates a chart title for today's data
         title=(date + ' Temperature & Humidity'),
         # Specifies the X axis title
         xaxis=dict(title='Time'),
@@ -119,7 +124,7 @@ def plot_data(project_root, csv_path, date):
     # Plots the figure object to the Plotly API with the given filename
     offline.plot(fig, filename=(filename + '.html'), auto_open=False)
     py.plot(fig, filename='test', auto_open=False)
-    print('Graphed to Plotly')
+    print('Chart saved using Plotly to ' + chart_dir)
 
 
 # Requests a data package via serial or input
@@ -176,9 +181,14 @@ def check_connection():
     return serial_conn
 
 
-# Insertion point for the script
-if __name__ == '__main__':
+# Main execute of the script
+def main():
     data_package = request_data()
     timestamp, temperature, humidity = deconstruct(data_package)
     root, log_file, date_today = log_values('logs', timestamp, temperature, humidity)
     plot_data(root, log_file, date_today)
+
+
+# Insertion point for the script
+if __name__ == '__main__':
+    main()

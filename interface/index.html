@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--Sets the file up and imports dependencies-->
+    <meta charset="UTF-8">
+    <title>Arduino-Pi-Irrigation</title>
+    <!--Stylesheet-->
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <!--Imports JQuery library-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--Imports JavaScript functionality-->
+    <script src="scripting.js"></script>
+</head>
+<!--Main body of the page-->
+<body>
+<!--Page title-->
+<h1>Polytunnel Irrigation</h1>
+<!--Wrapper for containing the column elements-->
+<!--The page is divided into two columns to allow side-by-side elements-->
+<div id="wrapper">
+    <!--Left-hand side of the page-->
+    <div id="left-column">
+        <!--Container for current chart data-->
+        <div id="chart">
+            <h2>Latest data</h2>
+            <!--Iframe loads the HTML chart interactively within the page-->
+            <iframe id="chart-frame" width="1000" height="500" frameborder="0" scrolling="no"></iframe>
+        </div>
+        <!--Container for links to historical data-->
+        <div>
+            <h2>Historical data</h2>
+            <!--Unordered list for the previous 7 days (inclusive)-->
+            <ul>
+                <li><a id="today">Date</a></li>
+                <li><a id="1-day-prev"></a></li>
+                <li><a id="2-day-prev"></a></li>
+                <li><a id="3-day-prev"></a></li>
+                <li><a id="4-day-prev"></a></li>
+                <li><a id="5-day-prev"></a></li>
+                <li><a id="6-day-prev"></a></li>
+            </ul>
+        </div>
+    </div>
+    <!--Right-hand side of the page-->
+    <div id="right-column">
+        <!--Container for details of the current schedule-->
+        <div id="schedules">
+            <h2>Live schedule</h2>
+            <!--Schedule data is loaded as a table for ease of formatting-->
+            <table>
+                <!--Headers-->
+                <tr>
+                    <th colspan="2">Morning</th>
+                    <th colspan="2">Afternoon</th>
+                </tr>
+                <!--Start times-->
+                <tr>
+                    <td>Starts:</td>
+                    <td id="morn-start">[time]</td>
+                    <td>Starts:</td>
+                    <td id="aft-start">[time]</td>
+                </tr>
+                <!--End times-->
+                <tr>
+                    <td>Finishes:</td>
+                    <td id="morn-end">[time]</td>
+                    <td>Finishes:</td>
+                    <td id="aft-end">[time]</td>
+                </tr>
+                <!--Durations-->
+                <tr>
+                    <td>Duration:</td>
+                    <td id="morn-dur">[time]</td>
+                    <td>Duration:</td>
+                    <td id="aft-dur">[time]</td>
+                </tr>
+            </table>
+        </div>
+        <!--Container for weather widget-->
+        <div>
+            <h2>Local forecast</h2>
+            <!--Widget and dependencies are loaded from the host (MetOffice)-->
+            <script type="text/javascript"> moWWidgetParams = "moAllowUserLocation:true~moBackgroundColour:white~moColourScheme:grey~moDays:3~moDomain:www.metoffice.gov.uk~moFSSI:350903~moListStyle:vertical~moMapDisplay:none~moShowFeelsLike:true~moShowUV:true~moShowWind:true~moSpecificHeight:250~moSpecificWidth:300~moSpeedUnits:M~moStartupLanguage:en~moTemperatureUnits:C~moTextColour:black~moGridParams:weather,temperature,wind,feelslike,pop~"</script>
+            <script type="text/javascript"
+                    src="https://www.metoffice.gov.uk/public/pws/components/yoursite/loader.js"></script>
+        </div>
+    </div>
+</div>
+</body>
+</html>

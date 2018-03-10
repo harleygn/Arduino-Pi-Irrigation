@@ -1,0 +1,61 @@
+/*Sets the styling and layout for the web page*/
+h1, h2, h3, li, p, table {
+    font-family: "Helvetica Neue", sans-serif;
+    color: #95989A;
+}
+
+body {
+    margin-left: 40px;
+}
+
+#wrapper {
+    width: 1505px;
+    position: relative;
+}
+
+#left-column {
+    width: 1000px;
+    position: absolute;
+}
+
+#right-column {
+    width: 500px;
+    float: right;
+    padding-left: 40px;
+    box-sizing: border-box;
+}
+
+#chart-frame {
+    border: 1px solid #95989A;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#schedules {
+    width: auto;
+}
+
+table, th, td {
+    border-collapse: collapse;
+    text-align: left;
+}
+
+table {
+    width: 100%;
+}
+
+th {
+    font-size: large;
+}
+
+td {
+    padding-top: 15px;
+    padding-bottom: 5px;
+}

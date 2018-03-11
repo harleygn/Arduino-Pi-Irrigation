@@ -38,7 +38,7 @@ def log_values(log_dir, time_val, temp, hum):
     # Open up the directory
     log_dir = '{}/{}/'.format(project_root, log_dir)
     # Get today's date in the format DD-MM-YYYY
-    date = datetime.datetime.now().strftime("%d-%m-%Y")
+    date = datetime.datetime.now().strftime('%d-%m-%Y')
     # Builds a filename with the date and relevant filename
     file_name = date + '_log.csv'
     # The path variable is created separately to allow it returned separately

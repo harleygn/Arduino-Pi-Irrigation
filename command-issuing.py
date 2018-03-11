@@ -53,7 +53,7 @@ if __name__ == '__main__':
     ser = serial.Serial('/dev/ttyUSB0', 9600)
     ser = None
     time.sleep(2)
-    date = date = dt.now().strftime("%d-%m-%Y")
+    date = date = dt.now().strftime('%d-%m-%Y')
     tap_state = False
     while True:
         tap_state = issue_command(ser, tap_state, check_timings(read_schedule(date)))

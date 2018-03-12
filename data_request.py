@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Import modules for handling date/time objects, CSV files, OS commands and charts
+# Import modules
 import datetime
 import csv
 import os
@@ -111,7 +111,7 @@ def plot_data(project_root, csv_path, date):
         xaxis=dict(title='Time'),
         # Specifies the first Y axis title (Temperature)
         yaxis=dict(title='Temperature (°C)'),
-        # Specifies the parameters for the second Y axis (Humidity) 
+        # Specifies the parameters for the second Y axis (Humidity)
         yaxis2=dict(
             # Specifies the Y axis title
             title='Humidity (%)',
@@ -129,63 +129,97 @@ def plot_data(project_root, csv_path, date):
 
 # Requests a data package via serial or input
 def request_data():
+    # Sets boolean flag for package validity
     package_valid = False
+    # Obtains serial connection information
     serial_conn = check_connection()
+    # While the package is invalid:
     while not package_valid:
+        # If no serial connection can be made
         if not serial_conn:
+            # Defaults to manual input (for testing)
             package = input('Enter sample data: ')
+        # If a serial connection can be made
         else:
+            # Sets boolean flag for call/response
             connection = False
+            # Disables Data Terminal Ready to allow scripted communication
             time.sleep(1)
             serial_conn.setDTR(0)
             time.sleep(1)
+            # While there is no response
             while not connection:
+                # Send the 'call' signal
                 serial_conn.write(bytes('call\n', 'utf-8'))
+                # Reads the line in the buffer, decodes and removes newlines
+                # If the message is a valid 'response'
                 if serial_conn.readline().decode().strip() == 'response':
+                    # Sets the flag to indicate a valid call/response
                     connection = True
+            # With a healthy connection, the data request is sent in UTF-8
             serial_conn.write(bytes('datarequest\n', 'utf-8'))
+            # Decodes the package from binary and removes newlines
             package = serial_conn.readline().decode().strip()
+        # Checks that the package is in a valid format
         package_valid = validate_data(package)
     return package
 
 
-# Receiving-end validation checks that the package is in the correct format
+# Checks that the package is in the correct format
 def validate_data(package):
+    # Checks that the package is a string
     valid = isinstance(package, str)
+    # Checks that the package is 10 digits long
     if len(package) != 10:
         valid = False
+    # Checks that the first 2 digits (hours) is below 24
     elif int(package[:2]) > 23:
         valid = False
+    # Checks that the second 2 digits (minutes) is below 60
     elif int(package[2:4]) > 59:
         valid = False
+    # Checks that the digits 4-8 (temperature) are realistic (below 40)
     elif int(package[4:8]) > 4000:
         valid = False
-    elif int(package[-2:]) > 99:
+    # Checks that the last 2 digits (humidity) is within 100%
+    elif int(package[-2:]) >= 100:
         valid = False
+    # If any checks fail:
     if not valid:
+        # The data package is marked as invalid
         print('Invalid data package')
         return False
+    # Otherwise the data package is accepted
     else:
         return True
 
 
 # Attempts to open serial port, defaults to manual input
 def check_connection():
+    # Attempts to open the first possible serial port
     try:
         serial_conn = serial.Serial('/dev/ttyACM0', 9600)
+    # If this fails to open:
     except serial.serialutil.SerialException:
+        # The other possible port is attempted
         try:
             serial_conn = serial.Serial('/dev/ttyUSB0', 9600)
+        # If this fails also, no serial connection is made
         except serial.serialutil.SerialException:
+            # Indicates that manual input must be used
             serial_conn = False
     return serial_conn
 
 
-# Main execute of the script
+# Main execution of the script
 def main():
+    # Gets data package
     data_package = request_data()
+    # Gets individual data values
     timestamp, temperature, humidity = deconstruct(data_package)
+    # Saves data to current CSV
     root, log_file, date_today = log_values('logs', timestamp, temperature, humidity)
+    # Plots data to a chart
     plot_data(root, log_file, date_today)
 
 

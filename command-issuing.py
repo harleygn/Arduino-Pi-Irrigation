@@ -25,7 +25,8 @@ def check_timings(schedule):
         return afternoon_start <= current_time < afternoon_end
 
 
-def issue_command(serial_conn, current_state, desired_state):
+def issue_command(current_state, desired_state):
+    serial_conn = check_connection()
     if (current_state is False) and (desired_state is True):
         tap_control(serial_conn, desired_state)
         return True
@@ -38,23 +39,36 @@ def issue_command(serial_conn, current_state, desired_state):
 
 def tap_control(serial_conn, state):
     connection = False
-    while not connection:
-        serial_conn.write(bytes('call\n', 'utf-8'))
-        if serial_conn.readline().decode().strip() == 'response':
-            connection = True
-    if connection:
-        if state:
-            serial_conn.write(bytes('on\n', 'utf-8'))
-        elif not state:
-            serial_conn.write(bytes('off\n', 'utf-8'))
+    if state:
+        command = 'on\n'
+    else:
+        command = 'off\n'
+    if not serial_conn:
+        print('Tap turned {}'.format(command))
+    else:
+        while not connection:
+            serial_conn.write(bytes('call\n', 'utf-8'))
+            if serial_conn.readline().decode().strip() == 'response':
+                connection = True
+                serial_conn.write(bytes(command, 'utf-8'))
+
+
+# Attempts to open serial port, defaults to manual input
+def check_connection():
+    try:
+        serial_conn = serial.Serial('/dev/ttyUSB0', 9600)
+    except serial.serialutil.SerialException:
+        try:
+            serial_conn = serial.Serial('/dev/ttyACM0', 9600)
+        except serial.serialutil.SerialException:
+            serial_conn = False
+    return serial_conn
 
 
 if __name__ == '__main__':
-    ser = serial.Serial('/dev/ttyUSB0', 9600)
-    ser = None
     time.sleep(2)
     date = date = dt.now().strftime('%d-%m-%Y')
     tap_state = False
     while True:
-        tap_state = issue_command(ser, tap_state, check_timings(read_schedule(date)))
-        time.sleep(60)
+        tap_state = issue_command(tap_state, check_timings(read_schedule(date)))
+        time.sleep(3)

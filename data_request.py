@@ -22,6 +22,10 @@ def deconstruct(data):
     # Extracts the humidity value
     hum = data[-2:]
     # Returns all three values to be handled by another function
+    print('Data package {} deconstructed'.format(data))
+    print('Time: {}'.format(formatted_timestamp))
+    print('Temperature: {} C'.format(temp))
+    print('Humidity: {}%'.format(hum))
     return formatted_timestamp, temp, hum
 
 
@@ -47,6 +51,7 @@ def log_values(log_dir, time_val, temp, hum):
     if not os.path.exists(log_dir):
         # If not, it is created
         os.makedirs(log_dir)
+        print('Log directory {} created'.format(log_dir))
     # Checks if the log file already exists and sets a flag
     file_exists = os.path.isfile(path)
     # Opens up the log file for appending or creates a new one if it doesn't exist, closes automatically after use
@@ -58,6 +63,7 @@ def log_values(log_dir, time_val, temp, hum):
         # If, according the the flag, the log file did not previously exist, the column names are added
         if not file_exists:
             log.writeheader()
+            print('CSV log file {} created at {}'.format(file_name, log_dir))
         # The writes the log data the relevant columns
         log.writerow({'Time': time_val, 'Temperature (C)': temp, 'Humidity (%)': hum})
     # Returns the path of the log file and the current date
@@ -77,6 +83,7 @@ def plot_data(project_root, csv_path, date):
     if not os.path.exists(chart_dir):
         # If not, it is created
         os.makedirs(chart_dir)
+        print('Chart directory created at {}'.format(chart_dir))
     # Formats a matching filename for the chart
     filename = '{}/interface/charts/{}_chart'.format(project_root, date)
     # Specifies the parameters for the first line plot (Temperature)
@@ -154,12 +161,16 @@ def request_data():
                 # Reads the line in the buffer, decodes and removes newlines
                 # If the message is a valid 'response'
                 if serial_conn.readline().decode().strip() == 'response':
+                    print('Valid response received, requesting data')
                     # Sets the flag to indicate a valid call/response
                     connection = True
+                else:
+                    print('Invalid response, reattempting call')
             # With a healthy connection, the data request is sent in UTF-8
             serial_conn.write(bytes('datarequest\n', 'utf-8'))
             # Decodes the package from binary and removes newlines
             package = serial_conn.readline().decode().strip()
+            print('Data package {} received'.format(package))
         # Checks that the package is in a valid format
         package_valid = validate_data(package)
     return package
@@ -187,10 +198,11 @@ def validate_data(package):
     # If any checks fail:
     if not valid:
         # The data package is marked as invalid
-        print('Invalid data package')
+        print('Invalid data package or unknown command')
         return False
     # Otherwise the data package is accepted
     else:
+        print('Data package {} is valid'.format(package))
         return True
 
 

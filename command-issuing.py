@@ -67,15 +67,15 @@ def tap_control(serial_conn, state):
     # If the tap should be on:
     if state:
         # 'On' command is assigned
-        command = 'on\n'
+        command = 'on'
     # Else if the tap should be off:
     else:
         # 'Off' command is set
-        command = 'off\n'
+        command = 'off'
     # If no serial connection is available:
     if not serial_conn:
         # Message is printed to the terminal
-        print('Tap turned {}'.format(command))
+        print('Tap turned {} at {}'.format(command, time.strftime('%X')))
     # Otherwise, a serial connection is available:
     else:
         # While there is no response
@@ -87,7 +87,7 @@ def tap_control(serial_conn, state):
                 # Sets the flag to indicate a valid call/response
                 connection = True
                 # Sends the command via the serial port
-                serial_conn.write(bytes(command, 'utf-8'))
+                serial_conn.write(bytes(command + '\n', 'utf-8'))
 
 
 # Attempts to open serial port, defaults to manual input

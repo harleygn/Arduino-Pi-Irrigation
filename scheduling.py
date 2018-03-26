@@ -63,6 +63,7 @@ def adjust_time(schedule_template, weather_forecast):
     schedule_template['schedule'][0]['end'] = str(end_time)
     schedule_template['schedule'][0]['duration'] = str(duration)
     schedule = update_forecast(schedule_template, weather_forecast)
+    print(json.dumps(schedule, indent=4))
     return schedule
 
 

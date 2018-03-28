@@ -199,7 +199,8 @@ def validate_data(package):
     # If any checks fail:
     if not valid:
         # The data package is marked as invalid
-        print('Invalid data package or unknown command')
+        print('Invalid data package or unknown command, reattempting in 3 seconds...')
+        time.sleep(3)
         return False
     # Otherwise the data package is accepted
     else:

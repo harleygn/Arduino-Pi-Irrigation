@@ -3,12 +3,14 @@ from datetime import datetime as dt
 import json
 import time
 import serial
+import os
 
 
 # Loads the current schedule from the JSON file
 def read_schedule(schedule_date):
+    project_root = os.path.dirname(os.path.realpath(__file__))
     # Builds the schedule path using the current data
-    schedule_path = 'schedules/{}_schedule.json'.format(schedule_date)
+    schedule_path = '{}/schedules/{}_schedule.json'.format(project_root, schedule_date)
     # Opens the schedule file
     with open(schedule_path, 'r') as schedule_json:
         # Loads the JSON data as a string

@@ -130,7 +130,7 @@ def plot_data(project_root, csv_path, date):
     fig = go.Figure(data=data, layout=layout)
     # Plots the figure object to the Plotly API with the given filename
     offline.plot(fig, filename=(filename + '.html'), auto_open=False)
-    py.plot(fig, filename='test', auto_open=False)
+    py.plot(fig, filename=filename, auto_open=False)
     print('Chart saved using Plotly to ' + chart_dir)
 
 
@@ -165,7 +165,8 @@ def request_data():
                     # Sets the flag to indicate a valid call/response
                     connection = True
                 else:
-                    print('Invalid response, reattempting call')
+                    print('Invalid response, reattempting call in 3 seconds...')
+                    time.sleep(3)
             # With a healthy connection, the data request is sent in UTF-8
             serial_conn.write(bytes('datarequest\n', 'utf-8'))
             # Decodes the package from binary and removes newlines

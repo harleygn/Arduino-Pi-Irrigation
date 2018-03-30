@@ -85,7 +85,8 @@ def plot_data(project_root, csv_path, date):
         os.makedirs(chart_dir)
         print('Chart directory created at {}'.format(chart_dir))
     # Formats a matching filename for the chart
-    filename = '{}/interface/charts/{}_chart'.format(project_root, date)
+    filename = '{}_chart'.format(date)
+    filepath = '{}/interface/charts/{}'.format(project_root, filename)
     # Specifies the parameters for the first line plot (Temperature)
     trace1 = go.Scatter(
         # Loads the time values as the X axis
@@ -129,7 +130,7 @@ def plot_data(project_root, csv_path, date):
     # Builds the figure object with the previously defined data and layout
     fig = go.Figure(data=data, layout=layout)
     # Plots the figure object to the Plotly API with the given filename
-    offline.plot(fig, filename=(filename + '.html'), auto_open=False)
+    offline.plot(fig, filename=(filepath + '.html'), auto_open=False)
     py.plot(fig, filename=filename, auto_open=False)
     print('Chart saved using Plotly to ' + chart_dir)
 

@@ -54,23 +54,28 @@ def log_values(log_dir, time_val, temp, hum):
         print('Log directory {} created'.format(log_dir))
     # Checks if the log file already exists and sets a flag
     file_exists = os.path.isfile(path)
-    # Opens up the log file for appending or creates a new one if it doesn't exist, closes automatically after use
+    # Opens up the log file for appending or creates a new one if it doesn't
+    # exist, closes automatically after use
     with open(path, 'a') as logCSV:
         # Defines the column names for the CSV file
         headers = ['Time', 'Temperature (C)', 'Humidity (%)']
         # Creates a CSV object with the previous column names for writing to
         log = csv.DictWriter(logCSV, fieldnames=headers)
-        # If, according the the flag, the log file did not previously exist, the column names are added
+        # If, according the the flag, the log file did not previously exist,
+        # the column names are added
         if not file_exists:
             log.writeheader()
             print('CSV log file {} created at {}'.format(file_name, log_dir))
         # The writes the log data the relevant columns
-        log.writerow({'Time': time_val, 'Temperature (C)': temp, 'Humidity (%)': hum})
+        log.writerow({'Time': time_val,
+                      'Temperature (C)': temp,
+                      'Humidity (%)': hum})
     # Returns the path of the log file and the current date
     return project_root, path, date
 
 
-# Plots the current logs to a time-series chart with a double Y axis, saved to the Plotly API
+# Plots the current logs to a time-series chart with a double Y axis,
+# saved to the Plotly API
 def plot_data(project_root, csv_path, date):
     chart_dir = project_root + '/interface/charts/'
     # Loads the current CSV log file
@@ -200,7 +205,8 @@ def validate_data(package):
     # If any checks fail:
     if not valid:
         # The data package is marked as invalid
-        print('Invalid data package or unknown command, reattempting in 3 seconds...')
+        print('Invalid data package or unknown command, '
+              'reattempting in 3 seconds...')
         time.sleep(3)
         return False
     # Otherwise the data package is accepted
@@ -233,7 +239,8 @@ def main():
     # Gets individual data values
     timestamp, temperature, humidity = deconstruct(data_package)
     # Saves data to current CSV
-    root, log_file, date_today = log_values('logs', timestamp, temperature, humidity)
+    root, log_file, date_today = log_values(
+        'logs', timestamp, temperature, humidity)
     # Plots data to a chart
     plot_data(root, log_file, date_today)
 

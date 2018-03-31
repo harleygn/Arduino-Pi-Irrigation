@@ -10,7 +10,8 @@ import os
 def read_schedule(schedule_date):
     project_root = os.path.dirname(os.path.realpath(__file__))
     # Builds the schedule path using the current data
-    schedule_path = '{}/schedules/{}_schedule.json'.format(project_root, schedule_date)
+    schedule_path = '{}/schedules/{}_schedule.json'.format(project_root,
+                                                           schedule_date)
     # Opens the schedule file
     with open(schedule_path, 'r') as schedule_json:
         # Loads the JSON data as a string

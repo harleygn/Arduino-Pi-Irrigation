@@ -7,7 +7,8 @@ import os
 
 def get_forecast_data(api_key, location):
     # URL of the WeatherUnderground API for a 10 day forecast
-    url = 'http://api.wunderground.com/api/' + api_key + '/forecast10day/q/' + location + '.json'
+    url = 'http://api.wunderground.com/api/{}/forecast10day/q/{}.json'.format(
+        api_key, location)
     # Calls the API using 'GET' to retrieve the data as a JSON
     api_response = json.loads(requests.get(url).content.decode('utf-8'))
     # Parses the JSON to extract the relevant forecast type
@@ -22,7 +23,8 @@ def get_forecast_data(api_key, location):
     return forecast_data
 
 
-# Loads a JSON schedule template, configured for a typical day, which is used for comparison
+# Loads a JSON schedule template, configured for a typical day,
+# which is used for comparison
 def load_schedule_template(schedule_path):
     # Returns an error if the template is not found
     if not os.path.isfile(schedule_path):
@@ -46,11 +48,15 @@ def add_minutes(time, minutes):
     return new_time.strftime('%H:%M:%S')
 
 
-# Alters the new schedule time parameters according to the forecasted difference in temperature against the template
+# Alters the new schedule time parameters according to the forecasted difference
+# in temperature against the template
 def adjust_time(schedule_template, weather_forecast):
-    # Finds the difference in in forecasted temperature compared to typical temperature
-    temp_difference = int(weather_forecast['high_temp']) - int(schedule_template['conditions']['high_temp'])
-    # Multiplies by five to create a significant difference, else the change wouldn't be enough
+    # Finds the difference in in forecasted temperature compared to
+    # typical temperature
+    temp_difference = int(weather_forecast['high_temp']) - int(
+        schedule_template['conditions']['high_temp'])
+    # Multiplies by five to create a significant difference,
+    # else the change wouldn't be enough
     adjustment_level = temp_difference * 5
     # Gets the typical start and end times for the morning schedule
     start_time = schedule_template['schedule'][0]['start']
@@ -58,7 +64,8 @@ def adjust_time(schedule_template, weather_forecast):
     # Adjusts the end time according the temperature differential
     end_time = add_minutes(end_time, adjustment_level)
     # Adjusts the duration to match the start and end times
-    duration = dt.datetime.strptime(end_time, '%H:%M:%S') - dt.datetime.strptime(start_time, '%H:%M:%S')
+    duration = dt.datetime.strptime(
+        end_time, '%H:%M:%S') - dt.datetime.strptime(start_time, '%H:%M:%S')
     # Schedule is altered with new calculations
     schedule_template['schedule'][0]['end'] = str(end_time)
     schedule_template['schedule'][0]['duration'] = str(duration)
@@ -77,7 +84,8 @@ def update_forecast(schedule, weather_forecast):
     return schedule
 
 
-# Saves a the new schedule as JSON, named according the the date, for use by other programs
+# Saves a the new schedule as JSON, named according the the date,
+# for use by other programs
 def save_schedule(updated_schedule, project_root, schedule_dir):
     # Gets the current date
     date = dt.datetime.now().strftime('%d-%m-%Y')

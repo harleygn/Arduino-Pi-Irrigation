@@ -28,11 +28,15 @@ function getChartName(difference) {
     return './charts/' + getDate(difference) + '_chart.html'
 }
 
+function getScheduleName(){
+    return './schedules/' + getDate(0) + '_schedule.json'
+}
+
 // Loads the schedule data using a local AJAX HTTP request
 $(document).ready(function () {
     $.ajax({
         // Location of the schedule (local)
-        url: "../schedules/schedule_template.json",
+        url: getScheduleName(),
         // Data returned in JSON format
         dataType: 'json',
         // Upon making a successful call the table cells are filled with the relevant data

@@ -18,29 +18,22 @@ def get_forecast_data(api_key, location):
     forecast_data = {'high_temp': int(tomorrow_weather['high']['celsius']),
                      'low_temp': int(tomorrow_weather['low']['celsius']),
                      'average_hum': int(tomorrow_weather['avehumidity'])}
+    print('Forecast data obtained: {}'.format(forecast_data))
     return forecast_data
-
-
-def check_template_exists(schedule_path):
-    try:
-        open(schedule_path)
-        return True
-    except FileNotFoundError:
-        return False
 
 
 # Loads a JSON schedule template, configured for a typical day, which is used for comparison
 def load_schedule_template(schedule_path):
-    project_root = os.path.dirname(os.path.realpath(__file__))
-    schedule_path = project_root + '/' + schedule_path
-    if check_template_exists(schedule_path):
+    # Returns an error if the template is not found
+    if not os.path.isfile(schedule_path):
+        print('Schedule template not found at {}'.format(schedule_path))
+    else:
+        project_root = os.path.dirname(os.path.realpath(__file__))
+        schedule_path = project_root + '/' + schedule_path
         # Returns the JSON as a a dictionary, allowing it to be modified
         with open(schedule_path, 'r') as template:
             schedule = json.load(template)  # The schedule template
         return schedule, project_root
-    # Returns an error if the template is not found
-    else:
-        print('Schedule not found')
 
 
 # Adjusts a timestamp by a given number of minutes
@@ -70,6 +63,7 @@ def adjust_time(schedule_template, weather_forecast):
     schedule_template['schedule'][0]['end'] = str(end_time)
     schedule_template['schedule'][0]['duration'] = str(duration)
     schedule = update_forecast(schedule_template, weather_forecast)
+    print(json.dumps(schedule, indent=4))
     return schedule
 
 
@@ -93,10 +87,10 @@ def save_schedule(updated_schedule, project_root, schedule_dir):
     with open(path, 'w') as write_schedule:
         # Exports the JSON data to the file and saves it
         json.dump(updated_schedule, write_schedule)
+        print('Schedule for {} saved to {}'.format(date, path))
 
 
-# Entry point for the script
-if __name__ == '__main__':
+def main():
     # Specifies location of the template schedule
     defaults, root = load_schedule_template('schedules/schedule_template.json')
     # Specifies the key and location to be used in the Wunderground API call
@@ -105,3 +99,8 @@ if __name__ == '__main__':
     new_schedule = adjust_time(defaults, forecast)
     # Saves the new schedule
     save_schedule(new_schedule, root, 'schedules')
+
+
+# Entry point for the script
+if __name__ == '__main__':
+    main()
